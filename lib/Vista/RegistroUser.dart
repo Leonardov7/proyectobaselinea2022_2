@@ -4,6 +4,7 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
+
 class RegistroUser extends StatefulWidget {
   @override
   RegistroUserApp createState() => RegistroUserApp();
@@ -30,6 +31,7 @@ class RegistroUserApp extends State<RegistroUser> {
     } catch (e) {
       print('ERROR--> ' + e.toString());
     }
+    //String clave=KEY_LOCAL_AUTH_ENABLED;
   }
 
   Widget build(BuildContext context) {

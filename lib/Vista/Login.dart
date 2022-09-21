@@ -1,9 +1,8 @@
 //import 'dart:js';
-
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:local_auth/local_auth.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -49,7 +48,8 @@ class LoginApp extends State<Login> {
       print('**************ERROR***********************' + e.toString());
     }
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -123,8 +123,13 @@ class LoginApp extends State<Login> {
                   primary: Colors.black45,
                 ),
                 onPressed: () async {
-                  print("dentro");
-                  //  bool isSuccess = await biometrico();
+                  print("dentro 111");
+                  bool isSuccess = await biometrico();
+                  print('Correcto --'+isSuccess.toString());
+
+                  if (isSuccess){
+                    print('Correcto');
+                  }
 
                   //    print('success ' + isSuccess.toString());
                 },
@@ -140,49 +145,52 @@ class LoginApp extends State<Login> {
   Future<bool> biometrico() async {
     //print("biométrico");
 
-    bool flag = true;
+    // bool flag = true;
     bool authenticated = false;
-    if (flag) {
-      const androidString = const AndroidAuthMessages(
-        cancelButton: "Cancelar",
-        goToSettingsButton: "Ajustes",
-        signInTitle: "Ingrese",
-        goToSettingsDescription: "Confirme su huella",
-        biometricHint: "Toque el sensor",
-        biometricNotRecognized: "Huella no reconocida",
-        biometricRequiredTitle: "Required Title",
-        biometricSuccess: "Huella reconocida",
-      );
-      bool canCheckBiometrics = await auth.canCheckBiometrics;
-      bool isBiometricSupported = await auth.isDeviceSupported();
-      List<BiometricType> availableBiometrics =
-          await auth.getAvailableBiometrics();
-      print(canCheckBiometrics); //Returns trueB
-      print("support -->" + isBiometricSupported.toString());
-      print(
-          availableBiometrics.toString()); //Returns [BiometricType.fingerprint]
-      try {
-        authenticated = await auth.authenticate(
-            localizedReason: "Autentíquese para acceder",
-            useErrorDialogs: true,
-            stickyAuth: true,
-            biometricOnly: true,
-            androidAuthStrings: androidString);
-        if (!authenticated) {
-          authenticated = false;
-        }
-      } on PlatformException catch (e) {
-        print(e);
+
+    const androidString = const AndroidAuthMessages(
+      cancelButton: "Cancelar",
+      goToSettingsButton: "Ajustes",
+      signInTitle: "Ingrese",
+      //fingerprintNotRecognized: 'Error de reconocimiento de huella digital',
+      goToSettingsDescription: "Confirme su huella",
+      //fingerprintSuccess: 'Reconocimiento de huella digital exitoso',
+      biometricHint: "Toque el sensor",
+      //signInTitle: 'Verificación de huellas digitales',
+      biometricNotRecognized: "Huella no reconocida",
+      biometricRequiredTitle: "Required Title",
+      biometricSuccess: "Huella reconocida",
+      //fingerprintRequiredTitle: '¡Ingrese primero la huella digital!',
+    );
+    bool canCheckBiometrics = await auth.canCheckBiometrics;
+  // bool isBiometricSupported = await auth.();
+    bool isBiometricSupported = await auth.isDeviceSupported();
+
+
+    List<BiometricType> availableBiometrics =
+        await auth.getAvailableBiometrics();
+    print(canCheckBiometrics); //Returns trueB
+    // print("support -->" + isBiometricSupported.toString());
+    print(availableBiometrics.toString()); //Returns [BiometricType.fingerprint]
+    try {
+      authenticated = await auth.authenticate(
+          localizedReason: "Autentíquese para acceder",
+          useErrorDialogs: true,
+          stickyAuth: true,
+          //biometricOnly: true,
+          androidAuthStrings: androidString);
+      if (!authenticated) {
+        authenticated = false;
       }
-      /* if (!mounted) {
+    } on PlatformException catch (e) {
+      print(e);
+    }
+    /* if (!mounted) {
         return;
       }*/
 
-    }
     return authenticated;
   }
-
-
 
   void mensaje(String titulo, String mess) {
     showDialog(
