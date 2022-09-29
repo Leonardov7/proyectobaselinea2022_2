@@ -79,8 +79,8 @@ class HomeStart extends State<Home> {
                       primary: Colors.black45, minimumSize: Size(400, 50)),
                   onPressed: () {
                     print('Ingreso Geo');
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => Geo()));
+                   // Navigator.push(
+                     //   context, MaterialPageRoute(builder: (_) => Geo()));
                   },
                   child: Text(
                     'Geolocalización',

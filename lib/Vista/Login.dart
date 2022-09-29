@@ -1,10 +1,16 @@
 //import 'dart:js';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:proyectobaselinea2022_2/DTO/UserObejct.dart';
+
+import 'Geo.dart';
+
 
 class Login extends StatefulWidget {
   @override
@@ -27,14 +33,29 @@ class LoginApp extends State<Login> {
       if (usuario.docs.length != 0) {
         print('***----2');
         for (var cursor in usuario.docs) {
-          print('**4444');
+        //  print('**4444');
+          final key = encrypt.Key.fromSecureRandom(32);
+          final iv = IV.fromSecureRandom(16);
+          final encrypter = Encrypter(AES(key));
+          final encrypted = encrypter.encrypt(pass.text, iv: iv);
+          // print(decrypted);
+          print(key);
+          print('Password----->' + encrypted.bytes.toString());
+          print(encrypted.base16);
+          print(encrypted.base64);
           if (correo.text == cursor.get('CorreoUsuario')) {
             print('***----3');
+
             if (pass.text == cursor.get('Pass')) {
               //idUser= cursor.id.toString();
               // flag = true;
-              //mensaje('Mensaje', 'dato encontrado',idUser);
-
+              UserObject userOb=UserObject();
+              userOb.nombre=cursor.get('NombreUsuario');
+              userOb.correo=cursor.get('CorreoUsuario');
+              userOb.rol=cursor.get('Rol');
+              mensaje('Mensaje', 'dato encontrado');
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => Geo(userOb)));
               print(cursor.id);
             }
           }

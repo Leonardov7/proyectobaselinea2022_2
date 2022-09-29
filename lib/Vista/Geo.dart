@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:proyectobaselinea2022_2/DTO/UserObejct.dart';
 
 class Geo extends StatefulWidget {
+  final UserObject userOb1;
+  Geo(this.userOb1);
   GeoApp createState() => GeoApp();
 }
 
@@ -12,7 +15,7 @@ class GeoApp extends State<Geo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Geolocalización'),
+        title: Text('Geolocalización '+widget.userOb1.nombre + ' Rol--> '+widget.userOb1.rol ),
         backgroundColor: Colors.lightGreen,
         actions: [
           IconButton(
